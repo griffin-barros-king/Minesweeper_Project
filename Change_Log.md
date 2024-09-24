@@ -1,4 +1,4 @@
-CURRENT VERSION: 0.0.1
+CURRENT VERSION: 0.0.2
 
 Version History:
 
