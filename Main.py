@@ -2,7 +2,7 @@ from tkinter import *
 from tkinter import messagebox
 
    
-
+#current method of determining board
 map = [
    [1, 0, 0, 0, 1, 0, 0, 0, 0],
    [0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -14,6 +14,7 @@ map = [
    [0, 0, 0, 1, 0, 0, 0, 0, 0],
    [0, 0, 0, 0, 0, 0, 0, 0, 1]
 ]
+
 top = Tk()
 top.geometry("144x210")
 
@@ -27,8 +28,8 @@ class Buttton():
         self.loc = loc
         self.button = Button(top, text = ' ', height = 1, width = 1, bg = 'blue')
         self.first_click = True
+        return
 
-    
     
     def regen(self):
         fix_map(self.x, self.y)
@@ -36,11 +37,8 @@ class Buttton():
         top_buttons[(self.x, self.y)].left_click(None)
         for key in top_buttons.keys():
             top_buttons[key].first_click = False
+        return
         
-        
-
-                       
-    
     
     def left_click(self, x):
         if self.button.cget('text') == 'F':
@@ -64,12 +62,8 @@ class Buttton():
         if (self.x, self.y) in safe_top_buttons.keys():
             safe_top_buttons.pop((self.x, self.y))
         self.check_win()
-        print(f'{self.x} {self.y}')
+        return
         
-        
-
-
-
 
     def right_click(self, x):
         if self.button.cget('text') == ' ':
@@ -78,12 +72,16 @@ class Buttton():
         else:
             self.button.config(text = ' ')
             self.label = ''
+        return
+
 
     def place(self):
         self.button.bind('<ButtonRelease-1>', self.left_click)
         self.button.bind('<Button-2>', self.right_click)
         self.button.bind('<Button-3>', self.right_click)
         self.button.place(x = self.x * 16, y = self.y * 23)
+        return
+
 
     def open(self, test):
         if bottom_buttons[test].val == ' ':
@@ -93,11 +91,12 @@ class Buttton():
             if ((top_buttons[test].x, top_buttons[test].y)) in safe_top_buttons.keys():
                 safe_top_buttons.pop((top_buttons[test].x, top_buttons[test].y))
         elif bottom_buttons[test].val != 'B':
-            print(f'{bottom_buttons[test].x} {bottom_buttons[test].y}')
             top_buttons[test].opened = True
             top_buttons[test].button.destroy()
             if ((top_buttons[test].x, top_buttons[test].y)) in safe_top_buttons.keys():
                 safe_top_buttons.pop((top_buttons[test].x, top_buttons[test].y))
+        return
+
 
     def open_neighbors(self, chord):
         if self.opened:
@@ -143,16 +142,17 @@ class Buttton():
         if self.y < len(map[0]) - 1:
             test = (self.x, self.y+1)
             self.open(test)
-        print('end')
         return
     
+
     def check_win(self):
         if len(safe_top_buttons) == 0:
             for key in top_buttons.keys():
                 top_buttons[key].button.destroy()
             msg=messagebox.showinfo("W", "YOU WIN :D")
-        else:
-            print(len(safe_top_buttons))
+        return
+
+
 
 
 class underButtton():
@@ -165,20 +165,25 @@ class underButtton():
         self.button = Button(top, text = val, height = 1, width = 1)
         if self.val == 'B':
             self.button.config(bg = 'orange')
+        return
 
     
     def left_click(self, x):
         self.chord()
-        print(f'{self.x} {self.y} val = ({self.val})')
+        return
+
 
     def place(self):
         self.button.bind('<ButtonRelease-1>', self.left_click)
         self.button.place(x = self.x * 16, y = self.y * 23)
+        return
+
 
     def chord(self):
         if self.val == ' ':
             return
     
+
         flags = 0
         if self.x > 0:
             if self.y > 0:
@@ -219,7 +224,9 @@ class underButtton():
             top_buttons[(self.x, self.y)].open_neighbors(True)
         top_buttons[(0,0)].check_win()
         return
-    
+
+
+
 
 def get_neighbors(x, y):
     if map[y][x] == 1:
@@ -269,6 +276,7 @@ def get_neighbors(x, y):
         return ' '
     return f'{num}'
 
+
 def fix_map(x, y):
     for i in range(len(map)):
         for j in range(len(map[0])):
@@ -280,7 +288,9 @@ def fix_map(x, y):
                     print(i)
                     print(j)
                     return
+    return
     
+
 def regenerate():
     global top_buttons
     global bottom_buttons
@@ -302,6 +312,7 @@ def regenerate():
             loc +=1
     return
 
+#initial board generation
 num_gens = 0
 loc = 0
 top_buttons = {}
@@ -323,23 +334,3 @@ for i in range(len(map)):
 
 top.mainloop()
       
-
-
-
-
-
-
-
-#top = Tk()
-#top.geometry("100x100")
-#
-#
-#
-#B = Button(top, text ="1", command = helloCallBack, height = 1, width = 1)
-#B.bind('<ButtonRelease-1>', helloCallBack)
-#B.place(x=0,y=0)
-#B = Button(top, text ="1", command = helloCallBack, height = 1, width = 1)
-#B.bind('<ButtonRelease-1>', helloCallBack)
-#B.place(x=16,y=0)
-#
-#top.mainloop()
